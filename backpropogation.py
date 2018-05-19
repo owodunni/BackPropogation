@@ -36,14 +36,34 @@ class NeuronLayer:
         self.weights = create_weights(neurons, inputs_)
         self.bias = create_bias(neurons)
 
-    def setWeights(self, W):
-        self.weights = W
+    def update_weights(self, w):
+        self.weights += w
 
-    def setBias(self, B):
-        self.bias = B
+    def update_bias(self, b):
+        self.bias += b
 
     def input(self, input_):
         return neuron(self.weights, input_, self.bias)
+
+
+def generate_sample():
+    mean1 = (50, 50, 50)
+    mean2 = (100, 50, 0)
+    cov = [[20, 5, 0],
+           [5, 10, 0],
+           [0, 0, 10]]
+
+    x1 = np.random.multivariate_normal(mean1, cov)
+    x2 = np.random.multivariate_normal(mean2, cov)
+
+    if random.choice([True, False]):
+        x = x1
+        y = (1, 0)
+    else:
+        x = x2
+        y = (0, 1)
+
+    return x, y
 
 
 if __name__ == '__main__':
@@ -51,32 +71,14 @@ if __name__ == '__main__':
             NeuronLayer(3, 4),
             NeuronLayer(4, 2)]
 
-    mean1 = (50, 50, 50)
-    mean2 = (100, 50, 0)
-    cov = [[20, 5, 0],
-           [5, 10, 0],
-           [0, 0, 10]]
-    sample1 = np.random.multivariate_normal(mean1, cov)
-    sample2 = np.random.multivariate_normal(mean2, cov)
-    print(sample1)
-    print(sample2)
 
-    input_ = sample1
 
-    if random.choice([True, False]):
-        input_ = sample1
-        labels = (1, 0)
-    else:
-        input_ = sample2
-        labels = (0, 1)
+    i = 0
+    while i < 1000:
+        i += 1
 
-    print("* sample")
-    print(input_)
+        x, y = generate_sample()
+        for layer in myNN:
+            x = layer.input(x)
 
-    for layer in myNN:
-        input_ = layer.input(input_)
-
-    print("* cost")
-    print(cost_function(labels, input_))
-    print("* result")
-    print(input_)
+        
