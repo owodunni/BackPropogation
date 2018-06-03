@@ -33,19 +33,21 @@ def bp1(x, y, z):
 
 
 def bp2(w, error, z):
-    return np.multiply(np.matmul(np.transpose(w), error), z)
+    return np.dot(w.transpose(), error) * sigmoid_delta(z)
 
 
 class NeuronLayer:
     def __init__(self, inputs_, neurons):
         self.weights = create_weights(neurons, inputs_)
         self.bias = create_bias(neurons)
-        self.step = 0.1
+        self.step = 3.0
 
     def update_layer(self):
-        self.delta_w = np.multiply(self.step, np.transpose(np.matmul(self.a_in, np.transpose(self.error))))
+        self.nabla_w = np.transpose(np.matmul(self.a_in, np.transpose(self.error)))
+        self.delta_w = np.multiply(self.step, self.nabla_w)
         self.weights = self.weights - self.delta_w
 
+        self.nabla_b = self.error
         self.delta_b = np.multiply(self.step, self.error)
         self.bias = self.bias - self.delta_b
 
@@ -105,7 +107,6 @@ if __name__ == '__main__':
         print(y)
         print("* sample")
         print(sample)
-
 
         myNN[2].error1(x, y)
         myNN[1].error2(myNN[2].weights, myNN[2].error)
