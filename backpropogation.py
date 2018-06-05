@@ -33,7 +33,7 @@ def bp1(x, y, z):
 
 
 def bp2(w, error, z):
-    return np.dot(w.transpose(), error) * sigmoid_delta(z)
+    return  np.multiply(np.dot(w.transpose(), error), sigmoid_delta(z))
 
 
 class NeuronLayer:
